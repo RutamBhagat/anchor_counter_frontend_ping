@@ -2,7 +2,7 @@ import { Box, Button, Spacer, Stack, Text, VStack } from "@chakra-ui/react";
 
 import { AppBar } from "../components/AppBar";
 import Head from "next/head";
-import { Increment } from "../components/Increment";
+import { IncrementAndDecrement } from "../components/IncrementAndDecrement";
 import { Initialize } from "../components/Initialize";
 import { NextPage } from "next";
 import styles from "../styles/Home.module.css";
@@ -26,7 +26,7 @@ const Home: NextPage = (props) => {
             {wallet.connected ? (
               counter ? (
                 <VStack>
-                  <Increment
+                  <IncrementAndDecrement
                     counter={counter}
                     setTransactionUrl={setTransactionUrl}
                   />

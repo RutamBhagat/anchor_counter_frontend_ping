@@ -10,14 +10,17 @@ import {
 
 import idl from "../idl.json";
 
-const PROGRAM_ID = `9pbyP2VX8Rc7v4nR5n5Kf5azmnw5hHfkJcZKPHXW98mf`;
+const PROGRAM_ID = `Fz9gqxzatYyEvKGXxQ55jq1mKfjnJoj9VxKwMqYm4MVZ`;
 
 export interface Props {
   counter;
   setTransactionUrl;
 }
 
-export const Increment: FC<Props> = ({ counter, setTransactionUrl }) => {
+export const IncrementAndDecrement: FC<Props> = ({
+  counter,
+  setTransactionUrl,
+}) => {
   const [count, setCount] = useState(0);
   const [program, setProgram] = useState<anchor.Program>();
   const { connection } = useConnection();
@@ -50,6 +53,18 @@ export const Increment: FC<Props> = ({ counter, setTransactionUrl }) => {
     setTransactionUrl(`https://explorer.solana.com/tx/${sig}?cluster=devnet`);
   };
 
+  const decrementCount = async () => {
+    const sig = await program.methods
+      .decrement()
+      .accounts({
+        counter: counter,
+        user: wallet.publicKey,
+      })
+      .rpc();
+
+    setTransactionUrl(`https://explorer.solana.com/tx/${sig}?cluster=devnet`);
+  };
+
   const refreshCount = async (program) => {
     const counterAccount = await program.account.counter.fetch(counter);
     setCount(counterAccount.count.toNumber());
@@ -59,6 +74,7 @@ export const Increment: FC<Props> = ({ counter, setTransactionUrl }) => {
     <VStack>
       <HStack>
         <Button onClick={incrementCount}>Increment Counter</Button>
+        <Button onClick={decrementCount}>Decrement Counter</Button>
         <Button onClick={() => refreshCount(program)}>Refresh count</Button>
       </HStack>
       <Text color="white">Count: {count}</Text>
